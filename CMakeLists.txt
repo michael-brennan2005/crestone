@@ -1,45 +1,52 @@
-﻿project("Crestone")
+﻿project("crestone")
 cmake_minimum_required(VERSION 3.22)
 
-# Crestone-lib
-add_library("crestone-lib"
-  "src/common.hpp"
-  "src/debug.cpp"
-  "src/debug.hpp"
-  "src/emulator.cpp"
-  "src/emulator.hpp"
-  "src/emulatorstate.cpp"
-  "src/emulatorstate.hpp"
-)
+# doctest
+add_library(doctest INTERFACE)
+target_include_directories(doctest INTERFACE ./libs/doctest)
 
-target_link_directories("crestone-lib" PRIVATE
-  ./libs/SFML/lib
-)
+# sfml
+function(ADD_SFML target_name)
+  target_link_directories(${target_name} PRIVATE
+    ./libs/SFML/lib
+  )
 
-target_include_directories("crestone-lib" PRIVATE
-  ./libs/SFML/include
-)
+  target_include_directories(${target_name} PRIVATE
+    ./libs/SFML/include
+  )
 
-target_link_libraries("crestone-lib"
-  sfml-window
-  sfml-system
-  sfml-graphics
-)
+  target_link_libraries(${target_name}
+    sfml-window
+    sfml-system
+    sfml-graphics
+  )
+endfunction()
 
-# Crestone-exe
-add_executable("crestone-exe" "src/main.cpp")
-target_link_libraries("crestone-exe" PRIVATE "crestone-lib")
+# crestone-lib
+file(GLOB crestone-lib-files 
+  ./src/crestone-lib/*.cpp 
+  ./src/crestone-lib/*.hpp)
 
-target_link_directories("crestone-exe" PRIVATE
-  ./libs/SFML/lib
-)
+add_library(crestone-lib ${crestone-lib-files})
+ADD_SFML(crestone-lib)
 
-target_include_directories("crestone-exe" PRIVATE
-  ./libs/SFML/include
-)
+# crestone-exe
+add_executable(crestone-exe src/main.cpp)
+ADD_SFML(crestone-exe)
 
-target_link_libraries("crestone-exe" PRIVATE
-  sfml-window
-  sfml-system
-  sfml-graphics
-)
+target_include_directories(crestone-exe
+  PRIVATE
+  ./src/crestone-lib)
+target_link_libraries(crestone-exe
+  crestone-lib)
+
+# crestone-test
+add_executable(crestone-test src/test.cpp)
+ADD_SFML(crestone-test)
+
+target_include_directories(crestone-test
+  PRIVATE
+  ./src/crestone-lib)
+target_link_libraries(crestone-test
+  crestone-lib
+  doctest)

@@ -1,4 +1,11 @@
-bin/
-obj/
-Crestone.make
-Makefile
+build/
+CMakeFiles/
+.idea/
+.vscode/
+build.ninja
+cmake_install.cmake
+CMakeCache.txt
+.ninja_deps
+.ninja_log
+crestone-exe
+libcrestone-lib.a

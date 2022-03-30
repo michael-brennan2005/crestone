@@ -37,6 +37,7 @@ ADD_SFML(crestone-exe)
 target_include_directories(crestone-exe
   PRIVATE
   ./src/crestone-lib)
+  
 target_link_libraries(crestone-exe
   crestone-lib)
 

@@ -8,4 +8,5 @@ CMakeCache.txt
 .ninja_deps
 .ninja_log
 crestone-exe
+crestone-test
 libcrestone-lib.a

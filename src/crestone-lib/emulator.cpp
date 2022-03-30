@@ -3,17 +3,20 @@
 //
 
 #include "emulator.hpp"
+#include "cpu.hpp"
 #include <iostream>
 #include <fstream>
 
 Emulator::Emulator() {
     emulator_state = new EmulatorState();
-    debug = new Debug();
+    debug = new Debug(emulator_state);
+    cpu = new Cpu(emulator_state);
 }
 
 Emulator::~Emulator() {
     delete emulator_state;
     delete debug;
+    delete cpu;
 }
 
 void Emulator::load_rom(char *file_name) {

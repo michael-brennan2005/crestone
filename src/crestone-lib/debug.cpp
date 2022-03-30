@@ -3,10 +3,10 @@
 #include "debug.hpp"
 #include "common.hpp"
 
-Debug::Debug() {}
+Debug::Debug(EmulatorState* emulator_state) : emulator_state(emulator_state) {}
 Debug::~Debug() {}
 
-void Debug::dump_memory(EmulatorState* emulator_state, int row_size) {
+void Debug::dump_memory(int row_size) {
     // '+' go on the memory fields because that promotes them from char to integer, printing their effective hex values.
     for (int i = 0; i < 4096 / row_size; i += 1) {
         std::cout << "0x" << std::setw(3) << std::setfill('0') << std::uppercase << std::hex << i * 16 << " | ";

@@ -5,9 +5,10 @@
 
 class Debug {
 public:
-    Debug();
+    Debug(EmulatorState* emulator_state);
     ~Debug();
-    void dump_memory(EmulatorState* emulator_state, int row_size);
+    EmulatorState* emulator_state;
+    void dump_memory(int row_size);
 };
 
 #endif // CRESTONE_DEBUG_H

@@ -8,11 +8,13 @@
 #include "common.hpp"
 #include "emulatorstate.hpp"
 #include "debug.hpp"
+#include "cpu.hpp"
 
 class Emulator {
 public:
     EmulatorState* emulator_state;
     Debug* debug;
+    Cpu* cpu;
     Emulator();
     ~Emulator();
     void load_rom(char* file_name);

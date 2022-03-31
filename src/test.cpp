@@ -1,11 +1,23 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.hpp"
+#include "crestone-lib/cpu.hpp"
 
-int factorial(int number) { return number <= 1 ? number : factorial(number - 1) * number; }
+TEST_CASE("Checking the CPU selectors") {
+    Cpu cpu = Cpu(NULL);
+    cpu.current_opcode = 0xABCD;
+    CHECK(cpu.nnn() == 0xBCD);
+    CHECK(cpu.n() == 0xD);
+    CHECK(cpu.x() == 0xB);
+    CHECK(cpu.y() == 0xC);
+    CHECK(cpu.kk() == 0xCD);
+}
 
-TEST_CASE("testing the factorial function") {
-    CHECK(factorial(1) == 1);
-    CHECK(factorial(2) == 2);
-    CHECK(factorial(3) == 6);
-    CHECK(factorial(10) == 3628800);
+TEST_CASE("Checking the CPU selectors pt. 2") {
+    Cpu cpu = Cpu(NULL);
+    cpu.current_opcode = 0x190F;
+    CHECK(cpu.nnn() == 0x90F);
+    CHECK(cpu.n() == 0xF);
+    CHECK(cpu.x() == 0x9);
+    CHECK(cpu.y() == 0x0);
+    CHECK(cpu.kk() == 0x0F);
 }

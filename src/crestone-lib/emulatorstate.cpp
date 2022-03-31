@@ -14,6 +14,7 @@ EmulatorState::EmulatorState() {
     program_counter = 0x200;
     stack_pointer = 0;
     stack = new u16[16]();
+    clear_display = false;
 }
 
 EmulatorState::~EmulatorState() {

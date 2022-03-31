@@ -19,6 +19,7 @@ public:
     u16 program_counter;
     u8 stack_pointer;
     u16* stack;
+    bool clear_display;
 };
 
 #endif //CRESTONE_EMULATORSTATE_H

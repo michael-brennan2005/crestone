@@ -13,7 +13,7 @@ public:
     ~EmulatorState();
     u8* memory;
     u8* registers;
-    u8 i_register;
+    u16 i_register;
     u8 delay_timer;
     u8 sound_timer;
     u16 program_counter;

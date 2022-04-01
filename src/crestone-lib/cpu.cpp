@@ -1,7 +1,7 @@
-#include "cpu.hpp"
+#include <random>
 
-#define GET_REGISTER( x ) emulator_state->registers[x]
-#define VF 15
+#include "cpu.hpp"
+#include "common.hpp"
 
 Cpu::Cpu(EmulatorState* emulator_state) : emulator_state(emulator_state) {}
 
@@ -14,14 +14,22 @@ u8 Cpu::y() {return (current_opcode & 0x00F0) >> 4; }
 u8 Cpu::kk() {return current_opcode & 0x00FF; }
 
 void Cpu::execute() {
+    if (emulator_state->delay_timer != 0) {
+        emulator_state->delay_timer--;
+    }
+
+    if (emulator_state->sound_timer != 0) {
+        emulator_state->sound_timer--;
+    }
+
     if (emulator_state->clear_display) {
         emulator_state->clear_display = false;
     }
 
-    current_opcode = emulator_state->memory[emulator_state->program_counter] << 8 + emulator_state->memory[emulator_state->program_counter + 1];
+    current_opcode = GET_MEMORY(emulator_state->program_counter) << 8 + GET_MEMORY(emulator_state->program_counter + 1);
     emulator_state->program_counter += 2;
     // Function pointers did not want to work :(
-    switch (current_opcode > 12) {
+    switch (current_opcode >> 12) {
         case 0x0:
             switch (kk()) {
                 case 0xE0:
@@ -264,61 +272,72 @@ void Cpu::OP_9XY0() {
 }
 
 void Cpu::OP_ANNN() {
-
+    emulator_state->i_register = nnn();
 }
 
 void Cpu::OP_BNNN() {
-
+    emulator_state->program_counter = nnn() + GET_REGISTER(0x0);
 }
 
 void Cpu::OP_CXKK() {
+    std::random_device r;
+    std::default_random_engine e1(r());
+    std::uniform_int_distribution<u8> uniform_dist(0x0, 0xFF);
 
+
+    GET_REGISTER(x()) = uniform_dist(e1) & kk(); 
 }
 
 void Cpu::OP_DXYN() {
-
+    // todo!
 }
 
 void Cpu::OP_EX9E() {
-
+    // todo!
 }
 
 void Cpu::OP_EXA1() {
-
+    // todo!
 }
 
 void Cpu::OP_FX07() {
-
+    GET_REGISTER(x()) = emulator_state->delay_timer;
 }
 
 void Cpu::OP_FX0A() {
-
+    // todo!
 }
 
 void Cpu::OP_FX15() {
-
+    emulator_state->delay_timer = GET_REGISTER(x());
 }
 
 void Cpu::OP_FX18() {
-
+    emulator_state->sound_timer = GET_REGISTER(y());
 }
 
 void Cpu::OP_FX1E() {
-
+    emulator_state->i_register += GET_REGISTER(x());
 }
 
 void Cpu::OP_FX29() {
-
+    // todo!
 }
 
 void Cpu::OP_FX33() {
-
-}
+    GET_MEMORY(emulator_state->i_register) = (int)((GET_REGISTER(x()) / 100) % 100);
+    GET_MEMORY(emulator_state->i_register + 1) = (int)((GET_REGISTER(x()) / 10) % 10);
+    GET_MEMORY(emulator_state->i_register + 2) = (int)(GET_REGISTER(x()) % 10);
+}  
 
 void Cpu::OP_FX55() {
-
+    for (int i = 0; i < 16; i++) {
+        GET_MEMORY(emulator_state->i_register + i) = GET_REGISTER(i);
+    }
 }
 
 void Cpu::OP_FX65() {
-
+    for (int i = 0; i < 16; i++) {
+        GET_REGISTER(i) = GET_MEMORY(emulator_state->i_register + i);
+    }
 }

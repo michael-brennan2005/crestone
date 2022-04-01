@@ -7,6 +7,10 @@
 
 #include <stdint.h>
 
+#define GET_REGISTER( x ) emulator_state->registers[x]
+#define GET_MEMORY( x ) emulator_state->memory[x]
+#define VF 15
+
 typedef uint8_t u8;
 typedef uint16_t u16;
 

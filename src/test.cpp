@@ -1,9 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.hpp"
 #include "crestone-lib/cpu.hpp"
-
-#define GET_REGISTER( x ) emulator_state->registers[x]
-#define VF 15
+#include "crestone-lib/common.hpp"
 
 TEST_CASE("Checking the CPU selectors") {
     Cpu cpu = Cpu(NULL);
@@ -103,4 +101,15 @@ TEST_CASE_FIXTURE(CpuTestFixture, "Op 8xy7") {
     cpu->OP_8XY7();
     CHECK(GET_REGISTER(0x0) == 0x1);
     CHECK(GET_REGISTER(VF) == 0x0);
+}
+
+TEST_CASE_FIXTURE(CpuTestFixture, "Op FX33") {
+    GET_REGISTER(0x0) = 128;
+    emulator_state->i_register = 0x123;
+    cpu->current_opcode = 0x0000;
+
+    cpu->OP_FX33();
+    CHECK(GET_MEMORY(emulator_state->i_register) == 1);
+    CHECK(GET_MEMORY(emulator_state->i_register + 1) == 2);
+    CHECK(GET_MEMORY(emulator_state->i_register + 2)== 8);
 }

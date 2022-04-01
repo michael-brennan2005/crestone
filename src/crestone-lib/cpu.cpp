@@ -1,6 +1,7 @@
 #include "cpu.hpp"
 
 #define GET_REGISTER( x ) emulator_state->registers[x]
+#define VF 15
 
 Cpu::Cpu(EmulatorState* emulator_state) : emulator_state(emulator_state) {}
 
@@ -208,27 +209,58 @@ void Cpu::OP_8XY3() {
 }
 
 void Cpu::OP_8XY4() {
-    
+    int result = GET_REGISTER(x()) + GET_REGISTER(y());
+    if (result > 255) {
+        GET_REGISTER(VF) = 1;
+    } else {
+        GET_REGISTER(VF) = 0;
+    }
+    GET_REGISTER(x()) += GET_REGISTER(y());
 }
 
 void Cpu::OP_8XY5() {
-
+    u8 result = GET_REGISTER(x()) - GET_REGISTER(y()) ;
+    if (GET_REGISTER(x()) > GET_REGISTER(y())) {
+        GET_REGISTER(VF) = 1;
+    } else {
+        GET_REGISTER(VF) = 0;
+    }
+    
+    GET_REGISTER(x()) = result;
 }
 
 void Cpu::OP_8XY6() {
-
+    if (GET_REGISTER(x()) & 0b1 == 1) {
+        GET_REGISTER(VF) = 1;
+    } else {
+        GET_REGISTER(VF) = 0;
+    }
+    GET_REGISTER(x()) /= 2; 
 }
 
 void Cpu::OP_8XY7() {
-
+    u8 result = GET_REGISTER(y()) - GET_REGISTER(x());
+    if (GET_REGISTER(y()) > GET_REGISTER(x())) {
+        GET_REGISTER(VF) = 1;
+    } else {
+        GET_REGISTER(VF) = 0;
+    }
+    GET_REGISTER(x()) = result;
 }
 
 void Cpu::OP_8XYE() {
-
+    if (GET_REGISTER(x()) & 0b1 == 1) {
+        GET_REGISTER(VF) = 1;
+    } else {
+        GET_REGISTER(VF) = 0;
+    }
+    GET_REGISTER(x()) *= 2; 
 }
 
 void Cpu::OP_9XY0() {
-
+    if (GET_REGISTER(x()) != GET_REGISTER(y())) {
+        emulator_state->program_counter += 2;
+    }
 }
 
 void Cpu::OP_ANNN() {

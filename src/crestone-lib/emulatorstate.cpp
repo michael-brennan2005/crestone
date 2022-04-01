@@ -14,11 +14,29 @@ EmulatorState::EmulatorState() {
     program_counter = 0x200;
     stack_pointer = 0;
     stack = new u16[16]();
-    clear_display = false;
+    display = new bool[64*32];
+    fill_display(false);
+    kill_flag = false;
 }
 
 EmulatorState::~EmulatorState() {
     delete [] memory;
     delete [] registers;
     delete [] stack;
+}
+
+bool EmulatorState::get_pixel(int x, int y) {
+    return display[x * 16 + y];
+}
+
+void EmulatorState::set_pixel(int x, int y, bool value) {
+    display[x * 16 + y] = value;
+};
+
+void EmulatorState::fill_display(bool value) {
+    for (int i = 0; i < 64; i++) {
+        for (int j = 0; j < 32; j++) {
+            set_pixel(i, j, value);
+        }
+    }
 }

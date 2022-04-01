@@ -3,19 +3,22 @@
 //
 
 #include "emulator.hpp"
+#include "shell.hpp"
 #include "cpu.hpp"
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <thread>
 
 Emulator::Emulator() {
     emulator_state = new EmulatorState();
-    debug = new Debug(emulator_state);
+    shell = new Shell(emulator_state);
     cpu = new Cpu(emulator_state);
 }
 
 Emulator::~Emulator() {
     delete emulator_state;
-    delete debug;
+    delete shell;
     delete cpu;
 }
 
@@ -29,4 +32,16 @@ void Emulator::load_rom(char *file_name) {
     file.read(reinterpret_cast<char*>(emulator_state->memory + 0x200), length);
     file.close();
     std::cout << "Done!" << std::endl;
+}
+
+void Emulator::execute() {
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(1 / 60));
+        cpu->execute();
+        shell->execute();
+
+        if (emulator_state->kill_flag == true) {
+            break;
+        }
+    }
 }

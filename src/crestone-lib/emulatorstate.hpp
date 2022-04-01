@@ -19,7 +19,13 @@ public:
     u16 program_counter;
     u8 stack_pointer;
     u16* stack;
-    bool clear_display;
+
+    bool* display;
+    bool get_pixel(int x, int y);
+    void set_pixel(int x, int y, bool value);
+    void fill_display(bool value);
+
+    bool kill_flag;
 };
 
 #endif //CRESTONE_EMULATORSTATE_H

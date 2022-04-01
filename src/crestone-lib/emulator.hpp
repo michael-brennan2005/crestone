@@ -9,15 +9,17 @@
 #include "emulatorstate.hpp"
 #include "debug.hpp"
 #include "cpu.hpp"
+#include "shell.hpp"
 
 class Emulator {
 public:
     EmulatorState* emulator_state;
-    Debug* debug;
+    Shell* shell;
     Cpu* cpu;
     Emulator();
     ~Emulator();
     void load_rom(char* file_name);
+    void execute();
 };
 
 

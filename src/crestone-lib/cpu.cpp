@@ -22,11 +22,7 @@ void Cpu::execute() {
         emulator_state->sound_timer--;
     }
 
-    if (emulator_state->clear_display) {
-        emulator_state->clear_display = false;
-    }
-
-    current_opcode = GET_MEMORY(emulator_state->program_counter) << 8 + GET_MEMORY(emulator_state->program_counter + 1);
+    current_opcode = (GET_MEMORY(emulator_state->program_counter) << 8) + GET_MEMORY(emulator_state->program_counter + 1);
     emulator_state->program_counter += 2;
     // Function pointers did not want to work :(
     switch (current_opcode >> 12) {
@@ -156,7 +152,7 @@ void Cpu::execute() {
 }
 
 void Cpu::OP_00E0() {
-    emulator_state->clear_display = true;
+    emulator_state->fill_display(false);
 }
 
 void Cpu::OP_00EE() {
@@ -238,7 +234,7 @@ void Cpu::OP_8XY5() {
 }
 
 void Cpu::OP_8XY6() {
-    if (GET_REGISTER(x()) & 0b1 == 1) {
+    if ((GET_REGISTER(x()) & 0b1) == 1) {
         GET_REGISTER(VF) = 1;
     } else {
         GET_REGISTER(VF) = 0;
@@ -257,7 +253,7 @@ void Cpu::OP_8XY7() {
 }
 
 void Cpu::OP_8XYE() {
-    if (GET_REGISTER(x()) & 0b1 == 1) {
+    if ((GET_REGISTER(x()) & 0b1) == 1) {
         GET_REGISTER(VF) = 1;
     } else {
         GET_REGISTER(VF) = 0;

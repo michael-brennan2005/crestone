@@ -15,6 +15,7 @@ EmulatorState::EmulatorState() {
     stack_pointer = 0;
     stack = new u16[16]();
     display = new bool[64*32];
+
     fill_display(false);
     kill_flag = false;
 }
@@ -23,6 +24,7 @@ EmulatorState::~EmulatorState() {
     delete [] memory;
     delete [] registers;
     delete [] stack;
+    delete [] display;
 }
 
 bool EmulatorState::get_pixel(int x, int y) {

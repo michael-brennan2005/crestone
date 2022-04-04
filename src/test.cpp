@@ -113,3 +113,15 @@ TEST_CASE_FIXTURE(CpuTestFixture, "Op FX33") {
     CHECK(GET_MEMORY(emulator_state->i_register + 1) == 2);
     CHECK(GET_MEMORY(emulator_state->i_register + 2)== 8);
 }
+
+TEST_CASE_FIXTURE(CpuTestFixture, "Op DXYN") {
+    GET_REGISTER(0x0) = 0x0;
+    GET_MEMORY(0x0) = 0xF;
+    emulator_state->i_register = 0x0;
+    cpu->current_opcode = 0xD001;
+
+    CHECK(emulator_state->get_pixel(0,0) == true);
+    CHECK(emulator_state->get_pixel(0,2) == true);
+    CHECK(emulator_state->get_pixel(0,3) == true);
+    CHECK(emulator_state->get_pixel(0,4) == true);
+}

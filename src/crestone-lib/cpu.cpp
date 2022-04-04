@@ -84,6 +84,9 @@ void Cpu::execute() {
                 case 0x7:
                     OP_8XY7();
                     return;
+                case 0x8:
+                    OP_8XYE();
+                    return;
                 default:
                     return;
             }
@@ -253,12 +256,8 @@ void Cpu::OP_8XY7() {
 }
 
 void Cpu::OP_8XYE() {
-    if ((GET_REGISTER(x()) & 0b1) == 1) {
-        GET_REGISTER(VF) = 1;
-    } else {
-        GET_REGISTER(VF) = 0;
-    }
-    GET_REGISTER(x()) *= 2; 
+    GET_REGISTER(VF) = (GET_REGISTER(x()) & 0x80) >> 7;
+    GET_REGISTER(x()) <<= 2; 
 }
 
 void Cpu::OP_9XY0() {
@@ -285,7 +284,22 @@ void Cpu::OP_CXKK() {
 }
 
 void Cpu::OP_DXYN() {
-    // todo!
+    GET_REGISTER(VF) = 0;
+    for (int row = 0; row < n(); row++) {
+        u8 row_pixels = emulator_state->memory[emulator_state->i_register + row];
+        for (int col = 0; col < 8; col ++) {
+            u8 pixel_x = (GET_REGISTER(x()) + col) % 64;
+            u8 pixel_y = (GET_REGISTER(y()) + row) % 32;
+            bool sprite_pixel = static_cast<bool>(row_pixels & (0b10000000 >> col));
+            bool screen_pixel = emulator_state->get_pixel(pixel_x, pixel_y);
+            bool new_pixel = sprite_pixel ^ screen_pixel;
+            if (screen_pixel == true && new_pixel == false) {
+                // collision
+                GET_REGISTER(VF) = 1;
+            }
+            emulator_state->set_pixel(pixel_x, pixel_y, new_pixel);
+        }
+    }
 }
 
 void Cpu::OP_EX9E() {
@@ -317,7 +331,11 @@ void Cpu::OP_FX1E() {
 }
 
 void Cpu::OP_FX29() {
-    // todo!
+    u8 digit = GET_REGISTER(x());
+    if (digit > 0xF) 
+        return;
+
+    emulator_state->i_register = digit * 5;
 }
 
 void Cpu::OP_FX33() {

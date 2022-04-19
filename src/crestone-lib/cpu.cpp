@@ -237,11 +237,7 @@ void Cpu::OP_8XY5() {
 }
 
 void Cpu::OP_8XY6() {
-    if ((GET_REGISTER(x()) & 0b1) == 1) {
-        GET_REGISTER(VF) = 1;
-    } else {
-        GET_REGISTER(VF) = 0;
-    }
+    GET_REGISTER(VF) = (GET_REGISTER(x()) & 0b1);
     GET_REGISTER(x()) /= 2; 
 }
 

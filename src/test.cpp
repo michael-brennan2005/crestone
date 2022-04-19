@@ -116,12 +116,34 @@ TEST_CASE_FIXTURE(CpuTestFixture, "Op FX33") {
 
 TEST_CASE_FIXTURE(CpuTestFixture, "Op DXYN") {
     GET_REGISTER(0x0) = 0x0;
-    GET_MEMORY(0x0) = 0xF;
+    GET_MEMORY(0x0) = 0xFF;
     emulator_state->i_register = 0x0;
     cpu->current_opcode = 0xD001;
 
+    cpu->OP_DXYN();
     CHECK(emulator_state->get_pixel(0,0) == true);
-    CHECK(emulator_state->get_pixel(0,2) == true);
-    CHECK(emulator_state->get_pixel(0,3) == true);
-    CHECK(emulator_state->get_pixel(0,4) == true);
+    CHECK(emulator_state->get_pixel(1,0) == true);
+    CHECK(emulator_state->get_pixel(2,0) == true);
+    CHECK(emulator_state->get_pixel(3,0) == true);
+}
+
+TEST_CASE_FIXTURE(CpuTestFixture, "Op DXYN with collisions") {
+    GET_REGISTER(0x0) = 0x0;
+    GET_MEMORY(0x0) = 0xFF;
+    emulator_state->i_register = 0x0;
+    cpu->current_opcode = 0xD001;
+
+    cpu->OP_DXYN();
+    CHECK(emulator_state->get_pixel(0, 0) == true);
+    CHECK(emulator_state->get_pixel(1, 0) == true);
+    CHECK(emulator_state->get_pixel(2, 0) == true);
+    CHECK(emulator_state->get_pixel(3, 0) == true);
+
+    GET_MEMORY(0x0) = 0b00111100;
+    cpu->OP_DXYN();
+    CHECK(emulator_state->get_pixel(0, 0) == true);
+    CHECK(emulator_state->get_pixel(7, 0) == true);
+    CHECK(emulator_state->get_pixel(3, 0) == false);
+    CHECK(emulator_state->get_pixel(5, 0) == false);
+    CHECK(GET_REGISTER(VF) == 0x1);
 }

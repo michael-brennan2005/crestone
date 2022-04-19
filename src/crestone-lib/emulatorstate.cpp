@@ -28,11 +28,11 @@ EmulatorState::~EmulatorState() {
 }
 
 bool EmulatorState::get_pixel(int x, int y) {
-    return display[x * 16 + y];
+    return display[x + (64 * y)];
 }
 
 void EmulatorState::set_pixel(int x, int y, bool value) {
-    display[x * 16 + y] = value;
+    display[x + (64 * y)] = value;
 };
 
 void EmulatorState::fill_display(bool value) {

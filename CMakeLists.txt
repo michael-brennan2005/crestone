@@ -7,19 +7,35 @@ target_include_directories(doctest INTERFACE ./libs/doctest)
 
 # sfml
 function(ADD_SFML target_name)
-  target_link_directories(${target_name} PRIVATE
-    ./libs/SFML/lib
-  )
+  if(MSVC)
+    target_link_directories(${target_name} PRIVATE
+      ./libs/SFML-msvc/lib
+    )
 
-  target_include_directories(${target_name} PRIVATE
-    ./libs/SFML/include
-  )
+    target_include_directories(${target_name} PRIVATE
+      ./libs/SFML-msvc/include
+    )
 
-  target_link_libraries(${target_name}
-    sfml-window
-    sfml-system
-    sfml-graphics
-  )
+    target_link_libraries(${target_name}
+      sfml-window-d
+      sfml-system-d
+      sfml-graphics-d
+    )
+  else()
+    target_link_directories(${target_name} PRIVATE
+      ./libs/SFML/lib
+    )
+
+    target_include_directories(${target_name} PRIVATE
+      ./libs/SFML/include
+    )
+
+    target_link_libraries(${target_name}
+      sfml-window
+      sfml-system
+      sfml-graphics
+    )
+  endif()
 endfunction()
 
 # crestone-lib

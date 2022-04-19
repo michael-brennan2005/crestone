@@ -275,12 +275,7 @@ void Cpu::OP_BNNN() {
 }
 
 void Cpu::OP_CXKK() {
-    std::random_device r;
-    std::default_random_engine e1(r());
-    std::uniform_int_distribution<u8> uniform_dist(0x0, 0xFF);
-
-
-    GET_REGISTER(x()) = uniform_dist(e1) & kk(); 
+    GET_REGISTER(x()) = 0x12 & kk(); 
 }
 
 void Cpu::OP_DXYN() {

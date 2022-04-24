@@ -1,5 +1,5 @@
 #include <random>
-
+#include <iostream>
 #include "cpu.hpp"
 #include "common.hpp"
 
@@ -16,14 +16,6 @@ u8 Cpu::kk() {return current_opcode & 0x00FF; }
 void Cpu::execute() {
     if (emulator_state->wait_flag) {
         return;
-    }
-    
-    if (emulator_state->delay_timer != 0) {
-        emulator_state->delay_timer--;
-    }
-
-    if (emulator_state->sound_timer != 0) {
-        emulator_state->sound_timer--;
     }
 
     current_opcode = (GET_MEMORY(emulator_state->program_counter) << 8) + GET_MEMORY(emulator_state->program_counter + 1);

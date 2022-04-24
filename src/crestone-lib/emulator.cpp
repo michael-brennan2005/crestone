@@ -10,6 +10,8 @@
 #include <chrono>
 #include <thread>
 
+#include "timers.hpp"
+
 Emulator::Emulator() {
     emulator_state = new EmulatorState();
 
@@ -59,13 +61,15 @@ void Emulator::load_rom(char *file_name) {
 }
 
 void Emulator::execute() {
+    std::thread timer_thread(create_timer_thread, &emulator_state->delay_timer, &emulator_state->sound_timer);
     while (true) {
-        std::this_thread::sleep_for(std::chrono::seconds(1 / 60));
+        std::this_thread::sleep_for(std::chrono::seconds(1 / 500));
 
-        cpu->execute();
+
         // Clear input.
         emulator_state->clear_input();
         shell->execute();
+        cpu->execute();
 
         if (emulator_state->kill_flag == true) {
             break;

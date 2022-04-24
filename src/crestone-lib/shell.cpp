@@ -1,4 +1,5 @@
 #include "shell.hpp"
+#include "common.hpp"
 
 #include <iostream>
 
@@ -14,7 +15,21 @@ void Shell::execute() {
         }
         
         if (event.type == sf::Event::KeyPressed) {
-            std::cout << "Cool." << std::endl;
+            u8 index = emulator_state->key_to_index(event.key.code);
+            if (index == -1)
+                break;
+            
+            emulator_state->input[index] = true;
+            // wait flag is only set true by Fx0A.
+            if (emulator_state->wait_flag == true) {
+                emulator_state->wait_flag = false;
+
+                // so much for separation of repsonsiblities!
+                // ugly code VVVV
+                u16 current_opcode = (GET_MEMORY(emulator_state->program_counter) << 8) + GET_MEMORY(emulator_state->program_counter + 1);
+                emulator_state->registers[GET_REGISTER(((current_opcode & 0x0F00) >> 8))] = index; 
+            }
+
             break;
         }
     }

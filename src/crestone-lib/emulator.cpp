@@ -61,7 +61,10 @@ void Emulator::load_rom(char *file_name) {
 void Emulator::execute() {
     while (true) {
         std::this_thread::sleep_for(std::chrono::seconds(1 / 60));
+
         cpu->execute();
+        // Clear input.
+        emulator_state->clear_input();
         shell->execute();
 
         if (emulator_state->kill_flag == true) {

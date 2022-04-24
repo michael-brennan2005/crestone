@@ -14,6 +14,10 @@ u8 Cpu::y() {return (current_opcode & 0x00F0) >> 4; }
 u8 Cpu::kk() {return current_opcode & 0x00FF; }
 
 void Cpu::execute() {
+    if (emulator_state->wait_flag) {
+        return;
+    }
+    
     if (emulator_state->delay_timer != 0) {
         emulator_state->delay_timer--;
     }
@@ -294,11 +298,15 @@ void Cpu::OP_DXYN() {
 }
 
 void Cpu::OP_EX9E() {
-    // todo!
+    if (emulator_state->input[GET_REGISTER(x())]) {
+        emulator_state->program_counter += 2;
+    }
 }
 
 void Cpu::OP_EXA1() {
-    // todo!
+    if (!emulator_state->input[GET_REGISTER(x())]) {
+        emulator_state->program_counter += 2;
+    }
 }
 
 void Cpu::OP_FX07() {
@@ -306,7 +314,7 @@ void Cpu::OP_FX07() {
 }
 
 void Cpu::OP_FX0A() {
-    // todo!
+    emulator_state->wait_flag = true;
 }
 
 void Cpu::OP_FX15() {

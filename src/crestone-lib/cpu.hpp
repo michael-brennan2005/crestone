@@ -14,7 +14,6 @@ public:
 
     u16 current_opcode;
     
-    float dt; // for timers.
     u16 nnn();
     u8 n();
     u8 x();

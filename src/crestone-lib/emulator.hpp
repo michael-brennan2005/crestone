@@ -10,11 +10,13 @@
 #include "debug.hpp"
 #include "cpu.hpp"
 #include "shell.hpp"
+#include "timer.hpp"
 
 class Emulator {
 public:
     EmulatorState* emulator_state;
     Shell* shell;
+    Timer* timer;
     Cpu* cpu;
     Emulator();
     ~Emulator();

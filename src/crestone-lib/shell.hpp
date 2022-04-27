@@ -11,6 +11,7 @@ public:
     EmulatorState* emulator_state;
     sf::RenderWindow window; 
 
+    void press_key(int index);
     void execute();
 };
 

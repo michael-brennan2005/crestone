@@ -7,7 +7,6 @@
 
 #include "common.hpp"
 #include "emulatorstate.hpp"
-#include "debug.hpp"
 #include "cpu.hpp"
 #include "shell.hpp"
 #include "timer.hpp"

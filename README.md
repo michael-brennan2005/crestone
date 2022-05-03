@@ -1,4 +1,7 @@
-Crestone is a chip8 emulator I'm making in order to learn emulation and also C++ development.
+Crestone is a (mostly working) chip8 emulator I'm making in order to learn emulation and also C++ development. It implements everything but sound. 
+
+**Running** 
+Crestone takes one command line argument: the filename of the ROM you want to play. Simply type that in and you're golden!
 
 **Building for Linux**  
 Crestone's only dependency is SFML, whose Linux version libraries are included in libs/. Build configuration is done with CMake.

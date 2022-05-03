@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-Shell::Shell(EmulatorState* emulator_state) : emulator_state(emulator_state), window(sf::VideoMode(640, 320), "Hello World!") {}
+Shell::Shell(EmulatorState* emulator_state) : emulator_state(emulator_state), window(sf::VideoMode(640, 320), "Crestone - CHIP8 Emulator") {}
 Shell::~Shell() { window.close(); }
 
 void Shell::press_key(int index) {
@@ -62,12 +62,14 @@ void Shell::execute() {
         press_key(0xF);
         
     window.clear(sf::Color::Black);
+    float x_size = (float)window.getSize().x / 64.0;
+    float y_size = (float)window.getSize().y / 32.0;
 
     for (int x = 0; x < 64; x++) {
         for (int y = 0; y < 32; y++) {
             if (emulator_state->get_pixel(x, y)) {
-                sf::RectangleShape pixel(sf::Vector2<float>(10.0,10.0));
-                pixel.setPosition(x * (window.getSize().x / 64), y * (window.getSize().y / 32));
+                sf::RectangleShape pixel(sf::Vector2<float>(x_size,y_size));
+                pixel.setPosition(x * x_size, y * y_size);
                 pixel.setFillColor(sf::Color::White);
                 window.draw(pixel);
             }

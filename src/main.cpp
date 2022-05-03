@@ -1,8 +1,8 @@
 #include <iostream>
 #include "crestone-lib/emulator.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
     Emulator* emulator = new Emulator();
-    emulator->load_rom("spaceinvaders.ch8");
+    int result = emulator->load_rom(argv[1]);
     emulator->execute();
 }

@@ -19,7 +19,7 @@ public:
     Cpu* cpu;
     Emulator();
     ~Emulator();
-    void load_rom(char* file_name);
+    int load_rom(char* file_name);
     void execute();
 };
 

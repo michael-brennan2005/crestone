@@ -4,7 +4,6 @@
 void Timer::execute() {
     // from emulator::execute()
     dt += std::chrono::milliseconds(2).count();
-    std::cout << dt << std::endl;
     if (dt > 16) {
         dt = 0;
         if (emulator_state->sound_timer > 0) {

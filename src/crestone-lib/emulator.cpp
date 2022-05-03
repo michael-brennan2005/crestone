@@ -49,7 +49,7 @@ Emulator::~Emulator() {
     delete cpu;
 }
 
-void Emulator::load_rom(char *file_name) {
+int Emulator::load_rom(char *file_name) {
     std::cout << "Loading file " << file_name << "..." << std::endl;
     std::ifstream file(file_name, std::ios::binary|std::ios::ate);
     std::ifstream::pos_type pos = file.tellg();
@@ -58,7 +58,7 @@ void Emulator::load_rom(char *file_name) {
     file.seekg(0, std::ios::beg);
     file.read(reinterpret_cast<char*>(emulator_state->memory + 0x200), length);
     file.close();
-    std::cout << "Done!" << std::endl;
+    return 0;
 }
 
 void Emulator::execute() {
